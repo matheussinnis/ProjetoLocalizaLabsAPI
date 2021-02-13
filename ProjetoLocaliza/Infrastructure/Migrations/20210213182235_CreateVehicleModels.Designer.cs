@@ -4,14 +4,16 @@ using Infrastructure.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210213182235_CreateVehicleModels")]
+    partial class CreateVehicleModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,9 +114,6 @@ namespace Infrastructure.Migrations
                     b.Property<int>("TrunkCapacity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VehicleBrandId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("VehicleCategoryId")
                         .HasColumnType("int");
 
@@ -125,8 +124,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("VehicleBrandId");
 
                     b.HasIndex("VehicleCategoryId");
 
@@ -178,7 +175,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("VehicleBrandId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("VehicleBrandId");
 
                     b.ToTable("VehiclesModels");
                 });
@@ -194,10 +196,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.Vehicle", b =>
                 {
-                    b.HasOne("Core.Entities.VehicleBrand", "VehicleBrand")
-                        .WithMany()
-                        .HasForeignKey("VehicleBrandId");
-
                     b.HasOne("Core.Entities.VehicleCategory", "VehicleCategory")
                         .WithMany()
                         .HasForeignKey("VehicleCategoryId");
@@ -206,11 +204,18 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("VehicleModelId");
 
-                    b.Navigation("VehicleBrand");
-
                     b.Navigation("VehicleCategory");
 
                     b.Navigation("VehicleModel");
+                });
+
+            modelBuilder.Entity("Core.Entities.VehicleModel", b =>
+                {
+                    b.HasOne("Core.Entities.VehicleBrand", "VehicleBrand")
+                        .WithMany()
+                        .HasForeignKey("VehicleBrandId");
+
+                    b.Navigation("VehicleBrand");
                 });
 #pragma warning restore 612, 618
         }
