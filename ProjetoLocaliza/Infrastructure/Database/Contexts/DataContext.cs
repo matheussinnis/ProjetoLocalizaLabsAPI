@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +20,26 @@ namespace Infrastructure.Database.Contexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(GetConnectionString());
+        }
+
+        public override int SaveChanges()
+        {
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is BaseEntity && (
+                    e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                ((BaseEntity)entityEntry.Entity).UpdatedAt = DateTime.Now;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((BaseEntity)entityEntry.Entity).CreatedAt = DateTime.Now;
+                }
+            }
+
+            return base.SaveChanges();
         }
 
         public DbSet<User> Users { get; set; }
