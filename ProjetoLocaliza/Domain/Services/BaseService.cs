@@ -13,32 +13,32 @@ namespace Domain.Services
 
         public BaseService(IBaseRepository<T> repository) => this._repository = repository;
 
-        public async Task<T> AddAsync(T t)
+        public virtual async Task<T> AddAsync(T t)
         {
             await _repository.AddAsync(t);
             await _repository.SaveChangesAsync();
             return t;
         }
 
-        public async Task<T> UpdateAsync(T t)
+        public virtual async Task<T> UpdateAsync(T t)
         {
             _repository.Update(t);
             await _repository.SaveChangesAsync();
             return t;
         }
 
-        public async Task DeleteAsync(T t)
+        public virtual async Task DeleteAsync(T t)
         {
             _repository.Delete(t);
             await _repository.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] expressions)
+        public virtual Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] expressions)
         {
             return _repository.GetAllAsync(expressions);
         }
 
-        public Task<IEnumerable<T>> FilterAsync(
+        public virtual Task<IEnumerable<T>> FilterAsync(
             Expression<Func<T, bool>> where = null,
             params Expression<Func<T, object>>[] expressions
         )

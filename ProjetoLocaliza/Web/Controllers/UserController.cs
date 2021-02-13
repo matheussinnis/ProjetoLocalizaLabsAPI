@@ -46,11 +46,11 @@ namespace Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] User address)
+        public async Task<IActionResult> Create([FromBody] User user)
         {
             try
             {
-                await _userService.AddAsync(address);
+                await _userService.AddAsync(user);
                 return StatusCode(201);
             }
 

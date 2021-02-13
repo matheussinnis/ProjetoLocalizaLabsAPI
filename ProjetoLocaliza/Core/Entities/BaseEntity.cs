@@ -11,7 +11,6 @@ namespace Core.Entities
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        [Required]
         public DateTime UpdatedAt { get; set; }
     }
 }
