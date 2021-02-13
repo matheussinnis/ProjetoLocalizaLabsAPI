@@ -14,12 +14,12 @@ namespace Web.Controllers
     [Route("api/[controller]")]
     public class SessionController : Controller
     {
-        // private readonly ILogger<object> _logger;
+        private readonly ILogger<SessionController> _logger;
         private readonly ISessionService _sessionService;
 
-        public SessionController(/*ILogger<object> logger, */ISessionService sessionService)
+        public SessionController(ILogger<SessionController> logger, ISessionService sessionService)
         {
-            // _logger = logger;
+            _logger = logger;
             _sessionService = sessionService;
         }
 
@@ -40,7 +40,7 @@ namespace Web.Controllers
 
             catch (Exception exception)
             {
-                // _logger.Log(LogLevel.Error, exception, exception.Message);
+                _logger.Log(LogLevel.Error, exception, exception.Message);
                 return StatusCode(500, new{Message = exception.Message});
             }
         }
