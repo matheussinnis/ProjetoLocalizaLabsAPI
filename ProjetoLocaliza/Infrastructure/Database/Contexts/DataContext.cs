@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +24,7 @@ namespace Infrastructure.Database.Contexts
             optionsBuilder.UseSqlServer(GetConnectionString());
         }
 
-        public override int SaveChanges()
+        private void SetTimestamps()
         {
             var entries = ChangeTracker
                 .Entries()
@@ -34,12 +36,22 @@ namespace Infrastructure.Database.Contexts
                 ((BaseEntity)entityEntry.Entity).UpdatedAt = DateTime.Now;
 
                 if (entityEntry.State == EntityState.Added)
-                {
                     ((BaseEntity)entityEntry.Entity).CreatedAt = DateTime.Now;
-                }
             }
+        }
 
+        public override int SaveChanges()
+        {
+            SetTimestamps();
             return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = new CancellationToken()
+        )
+        {
+            SetTimestamps();
+            return base.SaveChangesAsync(cancellationToken);
         }
 
         public DbSet<User> Users { get; set; }
@@ -48,5 +60,8 @@ namespace Infrastructure.Database.Contexts
         public DbSet<VehicleBrand> VehiclesBrands { get; set; }
         public DbSet<VehicleCategory> VehiclesCategorys { get; set; }
         public DbSet<VehicleModel> VehiclesModels { get; set; }
+        public DbSet<Checklist> Checklists { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Quotation> Quotations { get; set; }
     }
 }
