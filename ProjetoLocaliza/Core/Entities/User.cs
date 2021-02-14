@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Core.Enums;
 
 namespace Core.Entities
@@ -19,8 +21,10 @@ namespace Core.Entities
 
         public DateTime BirthdayDate { get; set; }
 
-        public Address Address { get; set; }
+        public virtual Address Address { get; set; }
 
         public UserType Type { get; set; }
+
+        public virtual ICollection<Schedule> Schedules { get; set; }
     }
 }
