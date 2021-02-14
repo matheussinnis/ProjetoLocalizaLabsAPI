@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Interfaces;
@@ -12,33 +9,31 @@ namespace Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class VehicleCategoryController : Controller
+    public class VehicleCategoryController : CrudController<VehicleCategory>
     {
-
-        private readonly ILogger<VehicleCategory> _logger;
-        private readonly IBaseService<VehicleCategory> _vehicleCategoryService;
-
-        public VehicleCategoryController(ILogger<VehicleCategory> logger, IBaseService<VehicleCategory> vehicleCategoryService)
-        {
-            _logger = logger;
-            _vehicleCategoryService = vehicleCategoryService;
-        }
+        public VehicleCategoryController(
+            ILogger<VehicleCategory> logger, IBaseService<VehicleCategory> service
+        ) : base(logger, service) {}
 
         [HttpPost]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Create([FromBody] VehicleCategory vehicleCategory)
+        public override Task<IActionResult> Create([FromBody] VehicleCategory vehicleCategory)
         {
-            try
-            {
-                await _vehicleCategoryService.AddAsync(vehicleCategory);
-                return StatusCode(201);
-            }
+            return base.Create(vehicleCategory);
+        }
 
-            catch (Exception exception)
-            {
-                _logger.Log(LogLevel.Error, exception, exception.Message);
-                return StatusCode(500, new { Message = exception.Message });
-            }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Operator")]
+        public override Task<IActionResult> Update(string id, [FromBody] VehicleCategory vehicleCategory)
+        {
+            return base.Update(id, vehicleCategory);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Operator")]
+        public override Task<IActionResult> Delete(string id)
+        {
+            return base.Delete(id);
         }
     }
 }
