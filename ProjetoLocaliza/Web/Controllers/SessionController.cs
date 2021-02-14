@@ -33,6 +33,11 @@ namespace Web.Controllers
                 return StatusCode(201, tokenAndUser);
             }
 
+            catch (PasswordMismatchException exception)
+            {
+                return StatusCode(400, new{Message = exception.Message});
+            }
+
             catch (NotFoundException exception)
             {
                 return StatusCode(404, new{Message = exception.Message});
