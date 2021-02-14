@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Interfaces;
@@ -12,53 +9,30 @@ namespace Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class UserController : CrudController<User>
     {
-        private readonly ILogger<User> _logger;
-        private readonly IBaseService<User> _userService;
-
-        public UserController(ILogger<User> logger, IBaseService<User> userService)
-        {
-            _logger = logger;
-            _userService = userService;
-        }
+        public UserController(ILogger<User> logger, IUserService service)
+            : base(logger, service) {}
 
         [HttpGet]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> GetAll(int? type)
+        public override Task<IActionResult> GetAll()
         {
-            try
-            {
-                IEnumerable<User> users;
-                
-                if (type == null) users = await _userService.GetAllAsync();
-                else users = await _userService.FilterAsync(user => (int) user.Type == type);
-                
-                return StatusCode(200, users);
-            }
-
-            catch (Exception exception)
-            {
-                _logger.Log(LogLevel.Error, exception, exception.Message);
-                return StatusCode(500, new{Message = exception.Message});
-            }
+            return base.GetAll();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] User user)
+        public override Task<IActionResult> Create([FromBody] User user)
         {
-            try
-            {
-                await _userService.AddAsync(user);
-                return StatusCode(201);
-            }
+            return base.Create(user);
+        }
 
-            catch (Exception exception)
-            {
-                _logger.Log(LogLevel.Error, exception, exception.Message);
-                return StatusCode(500, new{Message = exception.Message});
-            }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Operator")]
+        public override Task<IActionResult> Delete(string id)
+        {
+            return base.Delete(id);
         }
     }
 }
