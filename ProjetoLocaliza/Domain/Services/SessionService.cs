@@ -17,11 +17,13 @@ namespace Domain.Services
 
         public async Task<object> Create(string document, string password)
         {
-            var user = (await _repository.FilterAsync(
-                user => user.Document == document && user.Password == password)
-            ).FirstOrDefault();
+            var user = (await _repository
+                .FilterAsync(u => u.Document == document))
+                .FirstOrDefault();
 
-            if (user == null) throw new NotFoundException("Usuário ou senha inválidos");
+            if (user == null) throw new NotFoundException("Usuário não encontrado");
+            if (!PasswordEncryptor.Compare(password, user.Password))
+                throw new PasswordMismatchException("Usuário ou senha inválidos");
 
             var token = new TokenCreator().Create(user);
 
