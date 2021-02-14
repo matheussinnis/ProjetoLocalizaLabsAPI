@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Interfaces;
@@ -12,32 +10,51 @@ namespace Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class VehicleController : Controller
+    public class VehicleController : CrudController<Vehicle>
     {
+        public new IVehicleService _service { get; set; }
 
-        private readonly ILogger<Vehicle> _logger;
-        private readonly IBaseService<Vehicle> _vehicleService;
-
-        public VehicleController(ILogger<Vehicle> logger, IBaseService<Vehicle> vehicleService)
+        public VehicleController(
+            ILogger<Vehicle> logger, IVehicleService service
+        ) : base(logger, service)
         {
-            _logger = logger;
-            _vehicleService = vehicleService;
+            _service = service;
         }
 
         [HttpPost]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Create([FromBody] Vehicle vehicle)
+        public override Task<IActionResult> Create([FromBody] Vehicle vehicle)
+        {
+            return base.Create(vehicle);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Operator")]
+        public override Task<IActionResult> Update(string id, [FromBody] Vehicle vehicle)
+        {
+            return base.Update(id, vehicle);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Operator")]
+        public override Task<IActionResult> Delete(string id)
+        {
+            return base.Delete(id);
+        }
+
+        [HttpGet("/available")]
+        [Authorize]
+        public async Task<IActionResult> GetAvailableVehicles()
         {
             try
             {
-                await _vehicleService.AddAsync(vehicle);
-                return StatusCode(201);
+                return StatusCode(200, await _service.GetAvailableVehicles());
             }
 
             catch (Exception exception)
             {
                 _logger.Log(LogLevel.Error, exception, exception.Message);
-                return StatusCode(500, new { Message = exception.Message });
+                return StatusCode(500, new{Message = exception.Message});
             }
         }
     }
