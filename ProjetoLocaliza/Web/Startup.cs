@@ -34,8 +34,13 @@ namespace LocalizaAPI
             );
             services.AddDbContext<DataContext>();
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
             services.AddScoped(typeof(ISessionService), typeof(SessionService));
+            services.AddScoped(typeof(IUserService), typeof(UserService));
+            services.AddScoped(typeof(IQuotationService), typeof(QuotationService));
+            services.AddScoped(typeof(IScheduleService), typeof(ScheduleService));
+            services.AddScoped(typeof(IVehicleService), typeof(VehicleService));
 
             #region [JWT Token]
             var key = Encoding.ASCII.GetBytes(TokenCreator.GetSecret());
