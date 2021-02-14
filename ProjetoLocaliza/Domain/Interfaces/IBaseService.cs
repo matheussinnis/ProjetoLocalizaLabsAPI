@@ -9,11 +9,12 @@ namespace Domain.Interfaces
     {
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
-        Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] expressions);
+        Task DeleteAsync(string id);
+        Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
         Task<IEnumerable<T>> FilterAsync(
             Expression<Func<T, bool>> where,
-            params Expression<Func<T, object>>[] expressions
+            params Expression<Func<T, object>>[] includes
         );
+        Task<T> FindAsync(string id);
     }
 }
