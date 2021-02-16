@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0
+
+WORKDIR /app
+
+RUN dotnet tool install --global dotnet-ef
+
+RUN touch ~/.profile \
+    && echo 'export PATH="$PATH:$HOME/.dotnet/tools"' >> ~/.profile \
+    && export PATH="$PATH:$HOME/.dotnet/tools"
+
+COPY . .
+
+RUN cd Core && dotnet restore; cd .. \
+    && cd Infrastructure && dotnet restore; cd .. \
+    && cd Domain && dotnet restore; cd .. \
+    && cd Web && dotnet restore; cd ..
+
+EXPOSE 5000
+EXPOSE 5001
+
+ENTRYPOINT ["./entrypoint.prod.sh"]
