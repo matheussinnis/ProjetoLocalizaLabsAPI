@@ -1,0 +1,49 @@
+version: "3.1"
+
+networks:
+  desafio_localiza_api:
+    driver: bridge
+
+volumes:
+  desafio_localiza_api_data:
+    driver: local
+  mongo_api_data:
+    driver: local
+
+services:
+  sqlserver-service:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: sqlserver_db
+    working_dir: /usr/src/app
+    restart: unless-stopped
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=yourStrong(!)Password
+    volumes:
+      - desafio_localiza_api_data:/var/opt/mssql
+    networks:
+      - desafio_localiza_api
+
+  app:
+    build: .
+    container_name: desafio_localiza_api_app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - .:/app
+    environment:
+      - DB_HOST=sqlserver-service
+      - DB_PORT=1433
+      - DB_DATABASE=localiza_api
+      - DB_USERNAME=SA
+      - DB_PASSWORD=yourStrong(!)Password
+      - JWT_SECRET=str0ng-s3cr3t-f0r-t3sting
+      - JWT_EXPIRATION=2
+    depends_on:
+      - sqlserver-service
+    networks:
+      - desafio_localiza_api
