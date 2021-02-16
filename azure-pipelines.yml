@@ -30,27 +30,6 @@ stages:
         command: test
         projects: '**/*Tests/*.csproj'
 
-- stage: Migrations
-  displayName: Migrations stage
-  jobs:
-  - job: Migrations
-    displayName: Migrations
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'custom'
-          projects: 'Infrastructure/*.csproj'
-          custom: 'tool'
-          arguments: 'install --global dotnet-ef'
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: 'custom'
-          projects: 'Infrastructure/*.csproj'
-          custom: 'ef'
-          arguments: 'database update'
-
 - stage: Build
   displayName: Build stage
   jobs:
