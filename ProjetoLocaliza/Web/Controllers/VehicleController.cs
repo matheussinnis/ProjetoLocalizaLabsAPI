@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace Web.Controllers
@@ -23,21 +24,21 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Operator")]
-        public override Task<IActionResult> Create([FromBody] Vehicle vehicle)
+        public override Task<ObjectResult> Create([FromBody] Vehicle vehicle)
         {
             return base.Create(vehicle);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Operator")]
-        public override Task<IActionResult> Update(string id, [FromBody] Vehicle vehicle)
+        public override Task<ObjectResult> Update(string id, [FromBody] Vehicle vehicle)
         {
             return base.Update(id, vehicle);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Operator")]
-        public override Task<IActionResult> Delete(string id)
+        public override Task<IStatusCodeActionResult> Delete(string id)
         {
             return base.Delete(id);
         }

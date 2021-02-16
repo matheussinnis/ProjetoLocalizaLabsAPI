@@ -24,7 +24,7 @@ namespace Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetUserSchedules(string userId)
+        public async Task<ObjectResult> GetUserSchedules(string userId)
         {
             try
             {

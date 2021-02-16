@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace Web.Controllers
@@ -24,7 +25,7 @@ namespace Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public virtual async Task<IActionResult> GetAll()
+        public virtual async Task<ObjectResult> GetAll()
         {
             try
             {
@@ -40,7 +41,7 @@ namespace Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public virtual async Task<IActionResult> Find(string id)
+        public virtual async Task<ObjectResult> Find(string id)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public virtual async Task<IActionResult> Create([FromBody] T entity)
+        public virtual async Task<ObjectResult> Create([FromBody] T entity)
         {
             try
             {
@@ -80,7 +81,7 @@ namespace Web.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public virtual async Task<IActionResult> Update(string id, [FromBody] T entity)
+        public virtual async Task<ObjectResult> Update(string id, [FromBody] T entity)
         {
             try
             {
@@ -98,7 +99,7 @@ namespace Web.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public virtual async Task<IActionResult> Delete(string id)
+        public virtual async Task<IStatusCodeActionResult> Delete(string id)
         {
             try
             {

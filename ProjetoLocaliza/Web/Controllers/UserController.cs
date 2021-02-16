@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace Web.Controllers
@@ -16,21 +17,21 @@ namespace Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Operator")]
-        public override Task<IActionResult> GetAll()
+        public override Task<ObjectResult> GetAll()
         {
             return base.GetAll();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public override Task<IActionResult> Create([FromBody] User user)
+        public override Task<ObjectResult> Create([FromBody] User user)
         {
             return base.Create(user);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Operator")]
-        public override Task<IActionResult> Delete(string id)
+        public override Task<IStatusCodeActionResult> Delete(string id)
         {
             return base.Delete(id);
         }

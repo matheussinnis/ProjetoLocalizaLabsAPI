@@ -25,7 +25,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] LoginRequest request)
+        public async Task<ObjectResult> Create([FromBody] LoginRequest request)
         {
             try
             {
