@@ -459,6 +459,7 @@ MigrationBackup/
 # .NET Core build folders
 bin/
 obj/
+out/
 
 .vscode
 
