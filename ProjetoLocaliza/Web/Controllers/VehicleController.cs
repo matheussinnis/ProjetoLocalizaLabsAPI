@@ -44,11 +44,11 @@ namespace Web.Controllers
 
         [HttpGet("/available")]
         [Authorize]
-        public async Task<IActionResult> GetAvailableVehicles()
+        public async Task<IActionResult> GetAvailableVehicles(string agencyId)
         {
             try
             {
-                return StatusCode(200, await _service.GetAvailableVehicles());
+                return StatusCode(200, await _service.GetAvailableVehicles(agencyId));
             }
 
             catch (Exception exception)

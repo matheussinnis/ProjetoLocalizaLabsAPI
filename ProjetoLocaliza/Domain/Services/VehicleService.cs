@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
@@ -15,9 +16,9 @@ namespace Domain.Services
             _repository = repository;
         }
 
-        public Task<List<Vehicle>> GetAvailableVehicles()
+        public Task<List<Vehicle>> GetAvailableVehicles(string agencyId)
         {
-            return _repository.GetAvailableVehicles();
+            return _repository.GetAvailableVehicles(new Guid(agencyId));
         }
     }
 }

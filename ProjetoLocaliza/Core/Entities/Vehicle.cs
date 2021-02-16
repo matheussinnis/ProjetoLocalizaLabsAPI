@@ -39,6 +39,9 @@ namespace Core.Entities
         public Guid VehicleCategoryId { get; set; }
         public virtual VehicleCategory VehicleCategory { get; set; }
 
+        public Guid VehicleAgencyId { get; set; }
+        public virtual VehicleModel VehicleAgency{ get; set; }
+
         public virtual ICollection<Quotation> Quotations { get; set; }
 
         public virtual ICollection<Schedule> Schedules { get; set; }
