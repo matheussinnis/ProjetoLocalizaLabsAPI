@@ -16,7 +16,7 @@ dotnet watch --project Web/Web.csproj run -- --urls "http://0.0.0.0:5000"
 docker-compose up
 ```
 
-## Running on your dev or production environment with kubernetes
+## Running on your dev or production environment with kubernetes and HTTPS
 
 ```sh
 # Create a namespace for your ingress resources
