@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: localiza-labs
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+    - hosts:
+        - localiza-labs.eastus.cloudapp.azure.com
+      secretName: tls-secret
+  rules:
+    - host: localiza-labs.eastus.cloudapp.azure.com
+      http:
+        paths:
+          - backend:
+              serviceName: localiza-backend-service
+              servicePort: 5000
+            path: /b/(.*)
+#---
+#apiVersion: networking.k8s.io/v1beta1
+#kind: Ingress
+#metadata:
+#  name: localiza-labs-static
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    nginx.ingress.kubernetes.io/rewrite-target: /static/$2
+#    nginx.ingress.kubernetes.io/use-regex: "true"
+#    cert-manager.io/cluster-issuer: letsencrypt
+#spec:
+#  tls:
+#    - hosts:
+#        - localiza-labs.eastus.cloudapp.azure.com
+#      secretName: tls-secret
+#  rules:
+#    - host: localiza-labs.eastus.cloudapp.azure.com
+#      http:
+#        paths:
+#          - backend:
+#              serviceName: localiza-frontend-service
+#              servicePort: 80
+#            path: /static(/|$)(.*)
