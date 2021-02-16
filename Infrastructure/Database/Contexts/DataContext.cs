@@ -11,11 +11,11 @@ namespace Infrastructure.Database.Contexts
     {
         private string GetConnectionString()
         {
-            var host = System.Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
-            var port = System.Environment.GetEnvironmentVariable("DB_PORT") ?? "1433";
-            var database = System.Environment.GetEnvironmentVariable("DB_DATABASE") ?? "localiza_api";
-            var username = System.Environment.GetEnvironmentVariable("DB_USERNAME") ?? "SA";
-            var password = System.Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "yourStrong(!)Password";
+            var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+            var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "1433";
+            var database = Environment.GetEnvironmentVariable("DB_DATABASE") ?? "localiza_api";
+            var username = Environment.GetEnvironmentVariable("DB_USERNAME") ?? "SA";
+            var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "yourStrong(!)Password";
             return $"Server={host},{port}; Database={database}; User Id={username}; Password={password}";
         }
 
