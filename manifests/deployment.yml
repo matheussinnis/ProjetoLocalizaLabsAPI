@@ -1,19 +1,60 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: localizalabs 
+  name: localiza-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: localizalabs
+      app: localiza-backend
   template:
     metadata:
       labels:
-        app: localizalabs 
+        app: localiza-backend
     spec:
       containers:
-        - name: localizalabs 
-          image: axell.azurecr.io/localizalabs
+        - image: axell.azurecr.io/localizalabs
+          imagePullPolicy: Always
+          name: localiza-backend
           ports:
-          - containerPort: 5000
+            - containerPort: 5000
+            - containerPort: 5001
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: DB_PORT
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: DB_DATABASE
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: JWT_SECRET
+            - name: JWT_EXPIRATION
+              valueFrom:
+                secretKeyRef:
+                  name: localiza-backend-conf
+                  key: JWT_EXPIRATION
+          envFrom:
+            - secretRef:
+                name: localiza-backend-conf

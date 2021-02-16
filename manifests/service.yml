@@ -1,10 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: localizalabs
+  name: localiza-backend-service
 spec:
-    type: LoadBalancer
-    ports:
-    - port: 5000 
-    selector:
-        app: localizalabs
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 5000
+    - name: https
+      port: 5001
+  selector:
+    app: localiza-backend
