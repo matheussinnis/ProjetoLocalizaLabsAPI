@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: localizalabs 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: localizalabs
+  template:
+    metadata:
+      labels:
+        app: localizalabs 
+    spec:
+      containers:
+        - name: localizalabs 
+          image: axell.azurecr.io/localizalabs
+          ports:
+          - containerPort: 5000
