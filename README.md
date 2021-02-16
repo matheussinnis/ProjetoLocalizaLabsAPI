@@ -73,6 +73,14 @@ kubectl create secret generic localiza-backend-conf \
     --from-literal=JWT_EXPIRATION=<YOUR_JWT_EXPIRATION>
 
 kubectl apply -f k8s/mssql -n ingress-basic
+
+# Build and push docker image to your container registry
+docker build -t <YOUR_CONTAINER_REGISTRY_USER>/<IMAGE_NAME> -f Dockerfile.prod .
+docker push <YOUR_CONTAINER_REGISTRY_USER>/<IMAGE_NAME>
+
+# Replace k8s/app/deployment.yaml POD image
+sed -i 's#img-app-deployment#<YOUR_CONTAINER_REGISTRY_USER>/<IMAGE_NAME>#g' k8s/app/deployment.yaml
 kubectl apply -f k8s/app -n ingress-basic
+
 kubectl apply -f k8s/ingress -n ingress-basic
 ```
