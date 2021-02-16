@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql-service
+spec:
+  ports:
+    - port: 1433
+  selector:
+    app: mssql-server
+    tier: db
+  clusterIP: None
