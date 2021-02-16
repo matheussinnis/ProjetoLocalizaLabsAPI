@@ -51,12 +51,11 @@ stages:
     - upload: manifests
       artifact: manifests
 
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: publish
-        publishWebProjects: True
-        arguments: '--output $(Pipeline.Workspace)'
-        zipAfterPublish: True
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
   - deployment: Deploy
     displayName: Deploy
     pool:
@@ -84,36 +83,3 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
-
-# - stage: Deploy
-#   displayName: Deploy stage
-#   dependsOn: Build
-
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     pool:
-#       vmImage: $(vmImageName)
-#     environment: 'matheussinnisProjetoLocalizaLabsAPI.ingress-basic'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: KubernetesManifest@0
-#             displayName: Create imagePullSecret
-#             inputs:
-#               action: createSecret
-#               secretName: $(imagePullSecret)
-#               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
-
-#           - task: KubernetesManifest@0
-#             displayName: Deploy to Kubernetes cluster
-#             inputs:
-#               action: deploy
-#               manifests: |
-#                 $(Pipeline.Workspace)/s/manifests/deployment.yaml
-#                 $(Pipeline.Workspace)/s/manifests/service.yaml
-#               imagePullSecrets: |
-#                 $(imagePullSecret)
-#               containers: |
-#                 $(containerRegistry)/$(imageRepository):$(tag)
