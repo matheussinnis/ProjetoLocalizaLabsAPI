@@ -42,6 +42,12 @@ stages:
         inputs:
           command: 'custom'
           projects: 'Infrastructure/*.csproj'
+          custom: 'tool'
+          arguments: 'install --global dotnet-ef'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'custom'
+          projects: 'Infrastructure/*.csproj'
           custom: 'ef'
           arguments: 'database update'
 
