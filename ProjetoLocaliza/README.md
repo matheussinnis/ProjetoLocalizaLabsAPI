@@ -71,4 +71,8 @@ kubectl create secret generic localiza-backend-conf \
     --from-literal=DB_PASSWORD='<YOUR_PASSWORD>'\
     --from-literal=JWT_SECRET='<YOUR_JWT_SECRET>'\
     --from-literal=JWT_EXPIRATION=<YOUR_JWT_EXPIRATION>
+
+kubectl apply -f k8s/mssql -n ingress-basic
+kubectl apply -f k8s/app -n ingress-basic
+kubectl apply -f k8s/ingress -n ingress-basic
 ```
