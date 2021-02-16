@@ -72,6 +72,13 @@ stages:
     - upload: manifests
       artifact: manifests
 
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: publish
+        publishWebProjects: True
+        arguments: '--output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True
+
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
