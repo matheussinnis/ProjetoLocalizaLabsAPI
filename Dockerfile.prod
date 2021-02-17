@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0
 WORKDIR /app
 
 RUN dotnet tool install --global dotnet-ef
-RUN apt install -y nodejs npm
+RUN apt update && apt install -y nodejs npm
 
 RUN touch ~/.profile \
     && echo 'export PATH="$PATH:$HOME/.dotnet/tools"' >> ~/.profile \

@@ -21,7 +21,7 @@ RUN usermod -u 1000 www-data
 USER www-data
 
 RUN dotnet tool install --global dotnet-ef
-RUN apt install -y nodejs npm
+RUN apt update && apt install -y nodejs npm
 
 EXPOSE 5000
 EXPOSE 5001
