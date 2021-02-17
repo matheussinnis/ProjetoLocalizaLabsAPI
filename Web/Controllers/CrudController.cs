@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Exceptions;
@@ -41,11 +42,14 @@ namespace Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public virtual async Task<ObjectResult> Find(string id)
+        public virtual async Task<ObjectResult> Find(
+            string id,
+            params Expression<Func<T, object>>[] includes
+        )
         {
             try
             {
-                var entity = await _service.FindAsync(id);
+                var entity = await _service.FindAsync(id, includes);
                 return StatusCode(200, entity);
             }
 

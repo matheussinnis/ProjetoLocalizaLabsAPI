@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Linq.Expressions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Entities;
@@ -20,6 +22,16 @@ namespace Web.Controllers
         public override Task<ObjectResult> GetAll()
         {
             return base.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public override Task<ObjectResult> Find(
+            string id,
+            params Expression<Func<User, object>>[] includes
+        )
+        {
+            return base.Find(id, include => include.Address);
         }
 
         [HttpPost]

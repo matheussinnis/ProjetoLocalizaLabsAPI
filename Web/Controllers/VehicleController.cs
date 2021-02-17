@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -20,6 +21,23 @@ namespace Web.Controllers
         ) : base(logger, service)
         {
             _service = service;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public override Task<ObjectResult> GetAll()
+        {
+            return base.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public override Task<ObjectResult> Find(
+            string id,
+            params Expression<Func<Vehicle, object>>[] includes
+        )
+        {
+            return base.Find(id, includes);
         }
 
         [HttpPost]
