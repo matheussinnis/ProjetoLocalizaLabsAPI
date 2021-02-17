@@ -42,6 +42,7 @@ namespace LocalizaAPI
             services.AddScoped(typeof(IQuotationService), typeof(QuotationService));
             services.AddScoped(typeof(IScheduleService), typeof(ScheduleService));
             services.AddScoped(typeof(IVehicleService), typeof(VehicleService));
+            services.AddNodeServices();
 
             #region [JWT Token]
             var key = Encoding.ASCII.GetBytes(TokenCreator.GetSecret());
