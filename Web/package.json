@@ -1,0 +1,17 @@
+{
+  "name": "localiza-labs-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pdf.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsreport-chrome-pdf": "^1.10.0",
+    "jsreport-core": "^2.10.1",
+    "jsreport-jsrender": "^2.1.1"
+  }
+}
