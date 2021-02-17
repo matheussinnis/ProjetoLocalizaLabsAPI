@@ -19,7 +19,7 @@ namespace Infrastructure.Database.Repositories
                         join schedule in _context.Schedules on vehicle.Id equals schedule.VehicleId
                         into joinTable
                         from subschedule in joinTable.DefaultIfEmpty()
-                        where vehicle.VehicleAgencyId == agencyId
+                        where vehicle.AgencyId == agencyId
                         && (subschedule.RealReturnDate != null || subschedule.Id == null)
                         select vehicle).Distinct();
 
