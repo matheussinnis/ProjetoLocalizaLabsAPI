@@ -10,7 +10,6 @@ namespace Core.Entities
 {
     public class Agency : BaseEntity
     {
-
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public new Guid Id { get; set; }
@@ -19,7 +18,5 @@ namespace Core.Entities
         public string Name { get; set; }
 
         public virtual ICollection<Vehicle> Vehicles { get; set; }
-
-
     }
 }
