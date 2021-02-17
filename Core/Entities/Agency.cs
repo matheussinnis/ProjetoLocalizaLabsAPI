@@ -17,6 +17,18 @@ namespace Core.Entities
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public string Phone { get; set; }
+
+        [Required]
+        public string Whatsapp { get; set; }
+
+        [Required]
+        public double Latitude { get; set; }
+
+        [Required]
+        public double Longitude { get; set; }
+
         public virtual ICollection<Vehicle> Vehicles { get; set; }
     }
 }
