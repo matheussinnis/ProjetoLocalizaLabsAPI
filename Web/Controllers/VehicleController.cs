@@ -61,7 +61,7 @@ namespace Web.Controllers
             return base.Delete(id);
         }
 
-        [HttpGet("/available")]
+        [HttpGet("available")]
         [Authorize]
         public async Task<IActionResult> GetAvailableVehicles(string agencyId)
         {
