@@ -52,9 +52,12 @@ namespace Domain.Services
             return _repository.FilterAsync(where, includes);
         }
 
-        public virtual async Task<T> FindAsync(string id)
+        public virtual async Task<T> FindAsync(
+            string id,
+            params Expression<Func<T, object>>[] includes
+        )
         {
-            var entity = await _repository.FindAsync(id);
+            var entity = await _repository.FindAsync(id, includes);
             if (entity == null)
                 throw new NotFoundException($"{typeof(T).Name} não encontrado(a)");
 

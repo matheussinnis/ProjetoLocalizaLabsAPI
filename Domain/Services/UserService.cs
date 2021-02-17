@@ -1,3 +1,5 @@
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Exceptions;
@@ -19,9 +21,12 @@ namespace Domain.Services
             return quotation;
         }
 
-        public override async Task<User> FindAsync(string id)
+        public override async Task<User> FindAsync(
+            string id,
+            params Expression<Func<User, object>>[] includes
+        )
         {
-            var entity = await _repository.FindAsync(id, include => include.Address);
+            var entity = await _repository.FindAsync(id, includes);
             if (entity == null)
                 throw new NotFoundException($"{typeof(User).Name} não encontrado(a)");
 

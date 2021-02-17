@@ -15,6 +15,6 @@ namespace Domain.Interfaces
             Expression<Func<T, bool>> where,
             params Expression<Func<T, object>>[] includes
         );
-        Task<T> FindAsync(string id);
+        Task<T> FindAsync(string id, params Expression<Func<T, object>>[] includes);
     }
 }
