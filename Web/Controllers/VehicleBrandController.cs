@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Linq.Expressions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Entities;
@@ -15,6 +17,30 @@ namespace Web.Controllers
         public VehicleBrandController(
             ILogger<VehicleBrand> logger, IBaseService<VehicleBrand> service
         ) : base(logger, service) {}
+
+        [HttpGet]
+        [Authorize]
+        public override async Task<ObjectResult> GetAll()
+        {
+            try
+            {
+                return StatusCode(
+                    200,
+                    HttpContext.Request.Query["name"].Count > 0 ?
+                        await _service.FilterAsync(
+                            vehicleBrand => vehicleBrand.Name.Contains(
+                                HttpContext.Request.Query["name"]
+                            )
+                        ) : await _service.GetAllAsync()
+                );
+            }
+
+            catch (Exception exception)
+            {
+                _logger.Log(LogLevel.Error, exception, exception.Message);
+                return StatusCode(500, new{Message = exception.Message});
+            }
+        }
 
         [HttpPost]
         [Authorize(Roles = "Operator")]
