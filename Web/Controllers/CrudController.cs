@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Exceptions;
@@ -13,7 +12,7 @@ namespace Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public abstract class CrudController<T> : Controller where T : BaseEntity
+    public abstract class CrudController<T> : BaseController where T : BaseEntity
     {
         protected readonly ILogger<T> _logger;
         protected readonly IBaseService<T> _service;
