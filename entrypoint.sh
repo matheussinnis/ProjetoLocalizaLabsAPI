@@ -13,4 +13,5 @@ dockerize -wait tcp://$DB_HOST:$DB_PORT -timeout 120s
 dotnet ef database update
 popd
 
+pushd Web && npm install; popd
 dotnet watch --project Web/Web.csproj run -- --urls http://0.0.0.0:5000
