@@ -13,15 +13,19 @@ namespace Infrastructure.Database.Repositories
     {
         public VehicleRepository(DataContext context) : base(context) { }
 
-        public Task<List<Vehicle>> GetAvailableVehicles(Guid agencyId)
+        public Task<List<Vehicle>> GetAvailableVehicles(Guid agencyId, DateTime withdrawalDate)
         {
-            var query = (from vehicle in _context.Vehicles
-                        join schedule in _context.Schedules on vehicle.Id equals schedule.VehicleId
-                        into joinTable
-                        from subschedule in joinTable.DefaultIfEmpty()
-                        where vehicle.AgencyId == agencyId
-                        && (subschedule.RealReturnDate != null || subschedule.Id == null)
-                        select vehicle).Distinct();
+            var query = (
+                from vehicle in _context.Vehicles
+                join schedule in _context.Schedules on vehicle.Id equals schedule.VehicleId
+                into joinTable
+                from subschedule in joinTable.DefaultIfEmpty()
+                where vehicle.AgencyId == agencyId && (
+                    subschedule.ExpectedReturnDate.AddHours(2) <= withdrawalDate
+                    || subschedule.Id == null
+                )
+                select vehicle
+            ).Distinct();
 
             return query.ToListAsync();
         }

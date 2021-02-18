@@ -60,11 +60,16 @@ namespace Web.Controllers
 
         [HttpGet("available")]
         [Authorize]
-        public async Task<IActionResult> GetAvailableVehicles(string agencyId)
+        public async Task<IActionResult> GetAvailableVehicles(
+            string agencyId, DateTime withdrawalDate
+        )
         {
             try
             {
-                return StatusCode(200, await _service.GetAvailableVehicles(agencyId));
+                return StatusCode(
+                    200,
+                    await _service.GetAvailableVehicles(agencyId, withdrawalDate)
+                );
             }
 
             catch (Exception exception)

@@ -16,9 +16,9 @@ namespace Domain.Services
             _repository = repository;
         }
 
-        public Task<List<Vehicle>> GetAvailableVehicles(string agencyId)
+        public Task<List<Vehicle>> GetAvailableVehicles(string agencyId, DateTime withdrawalDate)
         {
-            return _repository.GetAvailableVehicles(new Guid(agencyId));
+            return _repository.GetAvailableVehicles(new Guid(agencyId), withdrawalDate);
         }
     }
 }
