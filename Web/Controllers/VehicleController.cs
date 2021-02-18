@@ -59,7 +59,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("available")]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAvailableVehicles(
             string agencyId, DateTime withdrawalDate
         )
