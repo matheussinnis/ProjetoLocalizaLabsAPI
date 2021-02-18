@@ -9,7 +9,7 @@ namespace Domain.Interfaces
     public interface IScheduleService : IBaseService<Schedule>
     {
         public Task<IEnumerable<Schedule>> GetUserSchedulesAsync(
-            string userId, string currentUserDocument
+            string userId, string currentUserId, string startDate, string endDate
         );
     }
 }

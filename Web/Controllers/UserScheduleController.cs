@@ -6,15 +6,16 @@ using Domain.Exceptions;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace Web.Controllers
 {
     [ApiController]
     [Route("api/user/{userId}/schedule")]
-    public class UserScheduleController : Controller
+    public class UserScheduleController : BaseController
     {
-        protected readonly ILogger<Schedule> _logger;
-        protected readonly IScheduleService _service;
+        private readonly ILogger<Schedule> _logger;
+        private readonly IScheduleService _service;
 
         public UserScheduleController(ILogger<Schedule> logger, IScheduleService service)
         {
@@ -28,9 +29,17 @@ namespace Web.Controllers
         {
             try
             {
-                return StatusCode(
-                    200, await _service.GetUserSchedulesAsync(userId, User.Identity.Name)
-                );
+                var strValueStartDate = HttpContext.Request.Query["startDate"];
+                var startDate = strValueStartDate == StringValues.Empty ?
+                    null : strValueStartDate.ToString();
+
+                var strValueEndDate = HttpContext.Request.Query["endDate"];
+                var endDate = strValueEndDate == StringValues.Empty ?
+                    null : strValueEndDate.ToString();
+
+                return StatusCode(200, await _service.GetUserSchedulesAsync(
+                    userId, GetCurrentUserId(), startDate, endDate
+                ));
             }
 
             catch (UnauthorizedException exception)

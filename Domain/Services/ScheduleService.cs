@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Enums;
@@ -59,19 +59,39 @@ namespace Domain.Services
             return schedule;
         }
 
-        public async Task<IEnumerable<Schedule>> GetUserSchedulesAsync(
-            string userId, string currentUserDocument
+        private Expression<Func<Schedule, bool>> MountGetUserSchedulesExpression(
+            Guid userId, string startDate, string endDate
         )
         {
-            var currentUser = (
-                await _userRepository.FilterAsync(user => user.Document == currentUserDocument)
-            ).First();
+            if (startDate != null && endDate != null)
+                return schedule => schedule.UserId == userId
+                    && schedule.CreatedAt >= DateTime.Parse(startDate)
+                    && schedule.CreatedAt <= DateTime.Parse(endDate);
 
-            if (currentUser.Type == UserType.Customer && userId != currentUser.Id.ToString())
+            if (startDate != null)
+                return schedule => schedule.UserId == userId
+                    && schedule.CreatedAt >= DateTime.Parse(startDate);
+
+            if (endDate != null)
+                return schedule => schedule.UserId == userId
+                    && schedule.CreatedAt <= DateTime.Parse(endDate);
+
+            return schedule => schedule.UserId == userId;
+        }
+
+        public async Task<IEnumerable<Schedule>> GetUserSchedulesAsync(
+            string userId, string currentUserId, string startDate, string endDate
+        )
+        {
+            var userIdGuid = new Guid(userId);
+            var currentUser = await _userRepository.FindAsync(currentUserId);
+
+            if (currentUser.Type == UserType.Customer && userIdGuid != currentUser.Id)
                 throw new UnauthorizedException("Não é possível listar agendamentos de outros usuários");
 
-            var guid = new Guid(userId);
-            return await _repository.FilterAsync(schedule => schedule.UserId == guid);
+            return await _repository.FilterAsync(MountGetUserSchedulesExpression(
+                userIdGuid, startDate, endDate
+            ));
         }
     }
 }
