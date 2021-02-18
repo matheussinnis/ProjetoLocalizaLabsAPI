@@ -21,6 +21,7 @@ namespace Infrastructure.Auth
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new Claim[]{
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Document),
                     new Claim(ClaimTypes.Role, user.Type.ToString()),
                 }),
