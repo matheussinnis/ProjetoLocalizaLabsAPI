@@ -21,7 +21,9 @@ RUN usermod -u 1000 www-data
 USER www-data
 
 RUN dotnet tool install --global dotnet-ef
-RUN apt update && apt install -y nodejs npm
+RUN apt update\
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash\
+    && . $HOME/.nvm/nvm.sh && nvm install v15.8.0
 
 EXPOSE 5000
 EXPOSE 5001
