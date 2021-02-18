@@ -3,13 +3,15 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0
 WORKDIR /app
 
 RUN dotnet tool install --global dotnet-ef
+ENV PATH /root/.dotnet/tools:$PATH
+
+ENV NODE_VERSION 15.8.0
 RUN apt update\
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash\
-    && . $HOME/.nvm/nvm.sh && nvm install v15.8.0
-
-RUN touch ~/.profile \
-    && echo 'export PATH="$PATH:$HOME/.dotnet/tools"' >> ~/.profile \
-    && export PATH="$PATH:$HOME/.dotnet/tools"
+    && . $HOME/.nvm/nvm.sh\
+    && nvm install $NODE_VERSION
+ENV NODE_PATH /root/.nvm/v$NODE_VERSION/lib/node_modules
+ENV PATH /root/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
 COPY . .
 
