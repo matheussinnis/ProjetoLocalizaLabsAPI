@@ -27,6 +27,8 @@ RUN apt install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2
         fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 --no-install-recommends\
     && rm -rf /var/lib/apt/lists/*
 
+ENV chrome:launchOptions:args --no-sandbox
+
 COPY . .
 
 RUN cd Core && dotnet restore; cd .. \

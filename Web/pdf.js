@@ -1,5 +1,14 @@
 module.exports = function (callback, customer, vehicle, schedule) {
-    const jsreport = require('jsreport-core')();
+    const jsreport = require('jsreport-core')({
+        extensions: {
+            "chrome-pdf": {
+                "launchOptions": {
+                    // executablePath: "/tmp/chromium",
+                    "args": ["--no-sandbox"]
+                }
+            }
+        }
+    });
     const fs = require('fs');
 
     schedule.ExpectedWithdrawalDate = new Date(Date.parse(schedule.ExpectedWithdrawalDate))

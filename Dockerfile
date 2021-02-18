@@ -25,6 +25,8 @@ RUN apt install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2
         fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 --no-install-recommends\
     && rm -rf /var/lib/apt/lists/*
 
+ENV chrome:launchOptions:args --no-sandbox
+
 # Set uid of www-data user inside the container to 1000. That way, it will be exactly the same user
 # as my linux user outside the container that also has uid 1000 because both, docker host and
 # docker machine, share the same kernel.
