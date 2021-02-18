@@ -7,6 +7,6 @@ namespace Domain.Interfaces
 {
     public interface IVehicleService : IBaseService<Vehicle>
     {
-        public Task<List<Vehicle>> GetAvailableVehicles(string agencyId);
+        public Task<List<Vehicle>> GetAvailableVehicles(string agencyId, DateTime withdrawalDate);
     }
 }

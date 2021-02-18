@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Entities;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
@@ -26,12 +27,25 @@ namespace Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public override Task<ObjectResult> Find(
-            string id,
-            params Expression<Func<User, object>>[] includes
-        )
+        public override async Task<ObjectResult> Find(string id)
         {
-            return base.Find(id, include => include.Address);
+            try
+            {
+                var entity = await _service.FindAsync(id, include => include.Address);
+                return StatusCode(200, entity);
+            }
+
+            catch (NotFoundException exception)
+            {
+                _logger.Log(LogLevel.Error, exception, exception.Message);
+                return StatusCode(404, new{Message = exception.Message});
+            }
+
+            catch (Exception exception)
+            {
+                _logger.Log(LogLevel.Error, exception, exception.Message);
+                return StatusCode(500, new{Message = exception.Message});
+            }
         }
 
         [HttpPost]

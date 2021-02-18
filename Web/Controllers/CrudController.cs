@@ -42,14 +42,11 @@ namespace Web.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public virtual async Task<ObjectResult> Find(
-            string id,
-            params Expression<Func<T, object>>[] includes
-        )
+        public virtual async Task<ObjectResult> Find(string id)
         {
             try
             {
-                var entity = await _service.FindAsync(id, includes);
+                var entity = await _service.FindAsync(id);
                 return StatusCode(200, entity);
             }
 

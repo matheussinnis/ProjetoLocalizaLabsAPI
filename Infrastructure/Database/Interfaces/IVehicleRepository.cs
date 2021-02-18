@@ -7,6 +7,6 @@ namespace Infrastructure.Database.Interfaces
 {
     public interface IVehicleRepository : IBaseRepository<Vehicle>
     {
-        Task<List<Vehicle>> GetAvailableVehicles(Guid agencyId);
+        Task<List<Vehicle>> GetAvailableVehicles(Guid agencyId, DateTime withdrawalDate);
     }
 }

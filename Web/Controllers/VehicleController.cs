@@ -32,12 +32,9 @@ namespace Web.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public override Task<ObjectResult> Find(
-            string id,
-            params Expression<Func<Vehicle, object>>[] includes
-        )
+        public override Task<ObjectResult> Find(string id)
         {
-            return base.Find(id, includes);
+            return base.Find(id);
         }
 
         [HttpPost]
