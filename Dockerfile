@@ -11,6 +11,14 @@ RUN mkdir -p /var/www
 RUN chown -R www-data:www-data /var/www
 RUN chown -R www-data:www-data /app
 
+# Install dependencies for jsreport PDF generation
+RUN apt install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2\
+    libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0\
+    libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6\
+    libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6\
+    libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates\
+    fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+
 # Set uid of www-data user inside the container to 1000. That way, it will be exactly the same user
 # as my linux user outside the container that also has uid 1000 because both, docker host and
 # docker machine, share the same kernel.
