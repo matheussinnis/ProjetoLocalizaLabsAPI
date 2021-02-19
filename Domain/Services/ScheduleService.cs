@@ -12,15 +12,15 @@ namespace Domain.Services
 {
     public class ScheduleService : BaseService<Schedule>, IScheduleService
     {
-        public IBaseRepository<User> _userRepository { get; set; }
-        public IBaseRepository<Vehicle> _vehicleRepository { get; set; }
-        public IBaseRepository<Quotation> _quotationRepository { get; set; }
+        public ICrudRepository<User> _userRepository { get; set; }
+        public ICrudRepository<Vehicle> _vehicleRepository { get; set; }
+        public ICrudRepository<Quotation> _quotationRepository { get; set; }
 
         public ScheduleService(
-            IBaseRepository<Schedule> repository,
-            IBaseRepository<User> userRepository,
-            IBaseRepository<Vehicle> vehicleRepository,
-            IBaseRepository<Quotation> quotationRepository
+            ICrudRepository<Schedule> repository,
+            ICrudRepository<User> userRepository,
+            ICrudRepository<Vehicle> vehicleRepository,
+            ICrudRepository<Quotation> quotationRepository
         ) : base(repository)
         {
             _userRepository = userRepository;

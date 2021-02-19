@@ -7,7 +7,7 @@ namespace Domain.Services
 {
     public class QuotationService : BaseService<Quotation>, IQuotationService
     {
-        public QuotationService(IBaseRepository<Quotation> repository) : base(repository) {}
+        public QuotationService(ICrudRepository<Quotation> repository) : base(repository) {}
 
         public new async Task<Quotation> AddAsync(Quotation quotation)
         {

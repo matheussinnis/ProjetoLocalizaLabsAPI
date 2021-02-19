@@ -11,7 +11,7 @@ namespace Domain.Services
 {
     public class UserService : BaseService<User>, IUserService
     {
-        public UserService(IBaseRepository<User> repository) : base(repository) {}
+        public UserService(ICrudRepository<User> repository) : base(repository) {}
 
         public new async Task<User> AddAsync(User quotation)
         {

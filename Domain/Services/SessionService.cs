@@ -11,9 +11,9 @@ namespace Domain.Services
 {
     public class SessionService : ISessionService
     {
-        protected readonly IBaseRepository<User> _repository;
+        protected readonly ICrudRepository<User> _repository;
 
-        public SessionService(IBaseRepository<User> repository) => _repository = repository;
+        public SessionService(ICrudRepository<User> repository) => _repository = repository;
 
         public async Task<object> Create(string document, string password)
         {

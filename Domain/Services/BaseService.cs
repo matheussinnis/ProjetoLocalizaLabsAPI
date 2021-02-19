@@ -11,9 +11,9 @@ namespace Domain.Services
 {
     public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
-        protected readonly IBaseRepository<T> _repository;
+        protected readonly ICrudRepository<T> _repository;
 
-        public BaseService(IBaseRepository<T> repository) => this._repository = repository;
+        public BaseService(ICrudRepository<T> repository) => this._repository = repository;
 
         public virtual async Task<T> AddAsync(T entity)
         {
