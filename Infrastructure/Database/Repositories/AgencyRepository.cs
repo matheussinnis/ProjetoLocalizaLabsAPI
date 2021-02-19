@@ -32,6 +32,7 @@ namespace Infrastructure.Database.Repositories
                 )
                 select new AvailableVehicleDto()
                 {
+                    Id = vehicle.Id,
                     FuelTypeName = vehicle.FuelType.ToString(),
                     HourlyPrice = vehicle.HourlyPrice,
                     Image = vehicle.Image,

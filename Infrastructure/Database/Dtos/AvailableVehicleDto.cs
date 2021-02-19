@@ -1,7 +1,10 @@
+using System;
+
 namespace Infrastructure.Database.Dtos
 {
     public class AvailableVehicleDto
     {
+        public Guid Id { get; set; }
         public string PlateLicense { get; set; }
         public string Image { get; set; }
         public int Year { get; set; }

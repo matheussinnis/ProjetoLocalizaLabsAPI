@@ -42,6 +42,7 @@ namespace Domain.Services
                     )
                 ).Select(v => new AvailableVehicleDto()
                     {
+                        Id = v.Id,
                         FuelTypeName = v.FuelType.ToString(),
                         HourlyPrice = v.HourlyPrice,
                         Image = v.Image,
