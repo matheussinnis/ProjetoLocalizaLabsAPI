@@ -57,6 +57,7 @@ namespace Infrastructure.Database.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<Agency> Agency { get; set; }
         public DbSet<VehicleBrand> VehiclesBrands { get; set; }
         public DbSet<VehicleCategory> VehiclesCategorys { get; set; }
         public DbSet<VehicleModel> VehiclesModels { get; set; }
