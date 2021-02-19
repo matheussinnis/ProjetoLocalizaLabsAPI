@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Core.Entities;
@@ -14,14 +12,9 @@ namespace Web.Controllers
     [Route("api/[controller]")]
     public class VehicleController : CrudController<Vehicle>
     {
-        public new IVehicleService _service { get; set; }
-
         public VehicleController(
-            ILogger<Vehicle> logger, IVehicleService service
-        ) : base(logger, service)
-        {
-            _service = service;
-        }
+            ILogger<Vehicle> logger, IBaseService<Vehicle> service
+        ) : base(logger, service) {}
 
         [HttpGet]
         [AllowAnonymous]
@@ -56,27 +49,6 @@ namespace Web.Controllers
         public override Task<IStatusCodeActionResult> Delete(string id)
         {
             return base.Delete(id);
-        }
-
-        [HttpGet("available")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAvailableVehicles(
-            string agencyId, DateTime withdrawalDate
-        )
-        {
-            try
-            {
-                return StatusCode(
-                    200,
-                    await _service.GetAvailableVehicles(agencyId, withdrawalDate)
-                );
-            }
-
-            catch (Exception exception)
-            {
-                _logger.Log(LogLevel.Error, exception, exception.Message);
-                return StatusCode(500, new{Message = exception.Message});
-            }
         }
     }
 }
