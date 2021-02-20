@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd Database
+pushd Infrastructure
 dotnet restore
 
 # Try to connect to the database every 1 second over 120 seconds
