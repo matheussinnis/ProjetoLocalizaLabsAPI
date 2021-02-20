@@ -209,5 +209,32 @@ namespace UnitTests.Web.Controllers
 
             Assert.Equal(500, response.StatusCode);
         }
+
+        [Fact]
+        public async void GetNearestAgencies()
+        {
+            var latitude = 1;
+            var longitude = 10;
+            _service.Setup(s => s.GetNearestAgencies(latitude, longitude))
+                .Returns(Task.FromResult(Enumerable.Empty<dynamic>()));
+
+            var response = await _controller.GetNearestAgencies(latitude, longitude);
+
+            Assert.Equal(200, response.StatusCode);
+            Assert.Equal(Enumerable.Empty<dynamic>(), ((ObjectResult) response).Value);
+        }
+
+        [Fact]
+        public async void GetNearestAgencies500()
+        {
+            var latitude = 1;
+            var longitude = 10;
+            _service.Setup(s => s.GetNearestAgencies(latitude, longitude))
+                .Throws(new Exception());
+
+            var response = await _controller.GetNearestAgencies(latitude, longitude);
+
+            Assert.Equal(500, response.StatusCode);
+        }
     }
 }
