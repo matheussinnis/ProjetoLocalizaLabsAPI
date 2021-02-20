@@ -59,7 +59,7 @@ namespace Web.Controllers
 
         [HttpGet("{id}/vehicles")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetVehicles(
+        public async Task<IStatusCodeActionResult> GetVehicles(
             string id, bool available, DateTime withdrawalDate,
             int page = 1, int perPage = 10
         )
@@ -67,7 +67,7 @@ namespace Web.Controllers
             try
             {
                 return StatusCode(200,
-                    await _service.GetAvailableVehicles(
+                    await _service.GetVehicles(
                         id, available, withdrawalDate, page, perPage
                     )
                 );
@@ -82,7 +82,7 @@ namespace Web.Controllers
 
         [HttpGet("nearest")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetNearestAgencies(
+        public async Task<IStatusCodeActionResult> GetNearestAgencies(
             float latitude, float longitude
         )
         {

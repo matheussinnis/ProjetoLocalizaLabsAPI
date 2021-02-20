@@ -23,7 +23,7 @@ namespace Domain.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<IEnumerable<AvailableVehicleDto>> GetAvailableVehicles(
+        public async Task<IEnumerable<AvailableVehicleDto>> GetVehicles(
             string agencyId, bool available, DateTime withdrawalDate,
             int page = 1, int perPage = 10
         )

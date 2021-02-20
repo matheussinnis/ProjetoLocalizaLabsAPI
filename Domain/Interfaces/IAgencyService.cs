@@ -8,7 +8,7 @@ namespace Domain.Interfaces
 {
     public interface IAgencyService : IBaseService<Agency>
     {
-        public Task<IEnumerable<AvailableVehicleDto>> GetAvailableVehicles(
+        public Task<IEnumerable<AvailableVehicleDto>> GetVehicles(
             string agencyId, bool available, DateTime withdrawalDate, int page, int perPage
         );
 
