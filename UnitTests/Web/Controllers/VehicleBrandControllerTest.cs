@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using Web.Controllers;
 using Xunit;
@@ -30,6 +34,39 @@ namespace UnitTests.Web.Controllers
                 Task.FromResult(Enumerable.Empty<VehicleBrand>())
             );
 
+            var httpContext = new DefaultHttpContext();
+            _controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContext
+            };
+            var response = await _controller.GetAll();
+
+            _service.Verify(s => s.GetAllAsync(), Times.Once);
+            Assert.Equal(200, response.StatusCode);
+            Assert.Equal(Enumerable.Empty<VehicleBrand>(), response.Value);
+        }
+
+        [Fact]
+        public async void TestGetAllWithName()
+        {
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Query = new QueryCollection(
+                new Dictionary<string, StringValues>()
+                {
+                    { "name", new StringValues("nameValue") }
+                }
+            );
+
+            _service.Setup(s => s.FilterAsync(
+                vehicleBrand => vehicleBrand.Name.Contains(
+                    httpContext.Request.Query["name"]
+                )
+            )).Returns(Task.FromResult(Enumerable.Empty<VehicleBrand>()));
+
+            _controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContext
+            };
             var response = await _controller.GetAll();
 
             Assert.Equal(200, response.StatusCode);
