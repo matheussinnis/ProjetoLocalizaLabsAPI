@@ -1,6 +1,310 @@
-# Localiza Labs Challenge
+# Desafio Localiza Labs
 
-## Running on your dev environment with docker
+A proposta do projeto é contemplar toda a jornada no que se refere a locação de veículos de passeio.
+
+## Time
+
+- [Axell Brendow](https://github.com/axell-brendow) ajudou na concepção do projeto, arquitetura do banco de dados, arquitetura da aplicação, implementação do pipeline de integração contínua e deploy contínuo e participou de todas as etapas/camadas do projeto
+- [Matheus Sinnis](https://github.com/matheussinnis) ajudou na concepção do projeto, arquitetura do banco de dados, arquitetura da aplicação, implementação do pipeline de integração contínua e deploy contínuo e participou de todas as etapas/camadas do projeto
+
+## Estrutura do projeto
+
+Nosso projeto foi pensado como uma mistura do clean code com a arquitetura onion.
+
+### Estrutura do projeto Web
+
+```
+Web/
+  pdf.js # Script para geração de PDFs em Node
+  vehicle-rental-template.html # Template do contrato de locação do veículo
+
+  Controllers/
+    BaseController.cs # Controller básico com método para pegar id do usuário logado
+    CrudController.cs # Controller abstrato de CRUD para a arquitetura REST
+
+  Requests/
+    LoginRequest # ViewModel para login
+```
+
+### Estrutura do projeto Domain
+
+```
+Domain/
+  Exceptions/ # Exceções específicas como NotFound, PasswordMismatch, etc
+
+  Interfaces/ # Interfaces de contrato para injeção de dependência
+
+  Services/ # Serviços com as regras de negócio do domínio
+    BaseService.cs # Serviço genérico para CRUDs
+```
+
+### Estrutura do projeto Infrastructure
+
+```
+Infrastructure/
+  Auth/
+    PasswordEncryptor.cs # Criptografia e comparação de senhas
+    TokenCreator.cs # Criador de tokens JWT
+
+  Database/
+    Contexts/ # Contextos de banco do Entity Framework
+    Dtos/ # Dtos ou views para queries que fogem do padrão de CRUD
+    Interfaces/ # Interfaces dos repositórios
+    Repositories/
+      BaseRepository.cs # Repositório com operações básicas fora do CRUD
+      CrudRepository.cs # Repositório com operações de CRUD
+
+  Migrations/ # Migrações do Entity Framework
+```
+
+### Estrutura do projeto Core
+
+```
+Core/
+  Entities/ # Entidades do sistema
+
+  Enums/ # Enumerações relacionadas às entidades
+```
+
+### Estrutura do projeto UnitTests
+
+```
+UnitTests/
+  Web/
+    Mocks/ # Simulações de classes abstratas para teste
+    Controllers/ # Testes dos controllers
+```
+
+#### Cobertura dos testes
+
+![Cobertura por testes](https://i.imgur.com/I2xvRPh.png)
+
+## Entidades
+
+### Usuário
+  - Documento
+  - Nome
+  - Senha
+  - Aniversário
+  - Tipo
+  - Endereço (relação 1:1)
+  - Agendamentos (relação N:1)
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+O atributo Documento pode ser CPF se tipo for “Cliente” ou Matrícula se tipo for “Operador”.
+
+A senha é criptografada no banco utilizando o algoritmo de criptografia BCrypt.
+
+O Tipo de Usuário é um “enum”, sendo Cliente = 0 e Operador = 1.
+
+O service faz as operações necessárias como:
+- `Adicionar(User user)`
+- `BuscarPorId(String id)`
+
+---
+
+### Endereço
+  - Id
+  - CEP
+  - Logradouro
+  - Número
+  - Complemento
+  - Cidade
+  - Estado
+  - Usuário (relação 1:1)
+
+Tem os getters e setter dos atributos.
+
+---
+
+### Agência
+  - Id
+  - Nome
+  - Veículos (relação N:1)
+
+Tem os getters e setter dos atributos.
+
+Utilizado no momento de busca de veículos disponíveis por agência.
+
+O service faz as operações necessárias como:
+- `ObterVeiculosDisponiveis(string IdAgencia)`
+
+---
+
+### Checklist
+  - Id
+  - Agendamento (relação 1:1)
+  - Limpo
+  - TanqueCheio
+  - Amassados
+  - Arranhoes
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+É criado um checklist padrão no momento do agendamento do veículo.
+
+---
+
+### Cotacao
+  - Id
+  - Veiculo (relação 1:N)
+  - PrecoHora
+  - Total
+  - DataEstimadaRetirada
+  - DataEstimadaRetorno
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+O Total é calculado de acordo com a quantidade de horas que o cliente ficou com o veículo em relação ao preço da hora do veículo.
+
+A cotação é gerada no sistema para garantir o preço no momento da consulta do cliente até a criação efetiva do agendamento.
+
+O service faz as operações necessárias como:
+- `Adicionar(Cotacao cotacao)`
+- `Atualizar(Cotacao cotacao)`
+
+---
+
+### Agendamento
+  - Id
+  - Usuario (relação 1:N)
+  - Veiculo (relação 1:N)
+  - Checklist (relação 1:1)
+  - Cotacao (relação 1:1)
+  - DataEstimadaRetirada
+  - DataEstimadaRetorno
+  - DataRealRetirada
+  - DataRealRetorno
+  - PrecoHora
+  - SubtotalEsperado
+  - SubtotalAposInspecao
+  - CustosExtras
+  - TotalEsperado
+  - TotalAposInspecao
+  - AntesInspecao
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+O Subtotal é calculado de acordo com a quantidade de horas que o cliente ficou com o veículo em relação ao preço da hora. Já o Subtotal após Inspeção, é calculado de acordo com as penalizações de checklist não de acordo - tendo o acréscimo de 30% para cada item do checklist.
+
+O Total Esperado é levado em consideração os custos extras e valores de horas.
+
+O Total após Inspeção é o valor total já com as penalizações, custos extras e valores devidos de horas de aluguel. 
+
+A busca de veículos disponíveis tem como base os veículos que não possuem agendamentos e veículos que irão retornar 2 horas antes da data de retirada que o cliente deseja.
+
+O service faz as operações necessárias como:
+- `SetarPrecoAgendamentoHora(Agendamento agendamento)`
+- `ObterAgendamentoPorUsuario(String idUsuario, string documentoUsuarioAtual)`
+
+---
+
+### Veiculo
+  - Placa
+  - Foto
+  - Ano
+  - TipoCombustivel
+  - PrecoHora
+  - CapacidadePortaMala
+  - CapacidadeTanque
+  - ModeloVeiculo (relação 1:N)
+  - MarcaVeiculo (relação 1:N)
+  - CategoriaVeiculo (relação 1:N)
+  - AgenciaVeiculo (relação 1:N)
+  - CotacaoVeiculo (relação N:1)
+  - AgendamentoVeiculo (relação N:1)
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+O Tipo de Combustível é um “enum”, sendo Alcool = 0, Gasolina = 1 e Diesel = 2.
+
+Os veículos são manipulados no banco através de CRUD genérico.
+
+---
+
+### ModeloVeiculo
+  - Id
+  - Nome 
+  - Veiculos (relação N:1)
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+Os modelos de veículos são manipulados no banco através de CRUD genérico.
+
+---
+
+### MarcaVeiculo
+  - Id
+  - Nome 
+  - Veiculos (relação N:1)
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+As marcas de veículos são manipulados no banco através de CRUD genérico.
+
+---
+
+### CategoriaVeiculo
+  - Id
+  - Nome 
+  - Veiculos (relação N:1)
+
+Tem os getters e setter dos atributos.
+
+Herda de uma classe abstrata que possui Id, Data e Hora de criação e atualização.
+
+As categorias (luxo, básico, etc) de veículos são manipuladas no banco através de CRUD genérico.
+
+## Funcionalidades da API
+
+Link da documentação (Swagger): https://localiza-labs.eastus.cloudapp.azure.com/swagger/index.html
+
+## Segurança da API
+
+- Autenticação via Json Web Token (JWT)
+- Cross Origin Resource Sharing (CORS)
+- Criptografia de senha usando o algoritmo bcrypt
+- Uso de variáveis de ambiente para definir credenciais de produção
+
+## Tecnologias utilizadas
+
+- .NET 5
+- Node
+- Git
+- JWT
+- Entity Framework (Code First)
+- SQL Server
+- Kubernetes (AKS)
+- CI/CD Azure DevOps
+- Docker
+- Docker-Compose
+- XUnit (Tests)
+- Moq (Tests)
+
+## Diferenciais
+
+- [Uso de queries com interpolação sem problemas de SQL Inject](https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/1644ad7367cd1494a0ab4295de65bf2b0dd2bbae/Domain/Services/AgencyService.cs#L63). [<ins>__Implementação__</ins>](https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/1644ad7367cd1494a0ab4295de65bf2b0dd2bbae/Infrastructure/Database/Repositories/BaseRepository.cs#L58)
+- [Funcionalidade que descobre a agência mais próxima do usuário dada sua latitude e longitude](https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/1644ad7367cd1494a0ab4295de65bf2b0dd2bbae/Domain/Services/AgencyService.cs#L63)
+- Criação da entidade de cotação para guardar o preço que o usuário verá na tela
+- Implementação de todas as funcionalidades que o frontend e o mobile precisariam em seus projetos
+
+## Como rodar o projeto
+
+### Rodando no seu ambiente de desenvolvimento com Docker
 
 ```sh
 # Create SQL Server container
@@ -10,13 +314,13 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:143
 dotnet watch --project Web/Web.csproj run -- --urls "http://0.0.0.0:5000"
 ```
 
-## Running on your dev environment with docker-compose
+### Rodando no seu ambiente de desenvolvimento com Docker-Compose
 
 ```sh
 docker-compose up
 ```
 
-## Running on your dev or production environment with kubernetes and HTTPS
+### Rodando no seu ambiente de desenvolvimento ou produção com Kubernetes, Ingress e HTTPS
 
 ```sh
 # Create a namespace for your ingress resources
