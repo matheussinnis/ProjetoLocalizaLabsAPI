@@ -39,6 +39,8 @@ services:
       - DB_HOST=sqlserver-service
       - DB_PORT=1433
       - DB_DATABASE=localiza_api
+      - TEST_DB_DATABASE=localiza_api_test
+      - DOTNET_ENVIRONMENT=TEST
       - DB_USERNAME=SA
       - DB_PASSWORD=yourStrong(!)Password
       - JWT_SECRET=str0ng-s3cr3t-f0r-t3sting
