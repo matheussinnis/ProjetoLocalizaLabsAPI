@@ -34,7 +34,8 @@ COPY . .
 RUN cd Core && dotnet restore; cd .. \
     && cd Infrastructure && dotnet restore; cd .. \
     && cd Domain && dotnet restore; cd .. \
-    && cd Web && dotnet restore; npm install; cd ..
+    && cd Web && dotnet restore; npm install; cd .. \
+    && cd UnitTests && dotnet restore; cd ..
 
 EXPOSE 5000
 EXPOSE 5001
