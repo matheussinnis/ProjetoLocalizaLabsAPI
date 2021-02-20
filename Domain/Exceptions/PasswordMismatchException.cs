@@ -4,7 +4,7 @@ namespace Domain.Exceptions
 {
     public class PasswordMismatchException : Exception
     {
-        public PasswordMismatchException(string? message) : base(message)
+        public PasswordMismatchException(string? message = null) : base(message)
         {
         }
     }
