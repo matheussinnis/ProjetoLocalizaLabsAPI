@@ -2,7 +2,7 @@
 
 A proposta do projeto é contemplar toda a jornada no que se refere a locação de veículos de passeio.
 
-## Time
+## Time Backend
 
 - [Axell Brendow](https://github.com/axell-brendow) ajudou na concepção do projeto, arquitetura do banco de dados, arquitetura da aplicação, implementação do pipeline de integração contínua e deploy contínuo e participou de todas as etapas/camadas do projeto
 - [Matheus Sinnis](https://github.com/matheussinnis) ajudou na concepção do projeto, arquitetura do banco de dados, arquitetura da aplicação, implementação do pipeline de integração contínua e deploy contínuo e participou de todas as etapas/camadas do projeto
