@@ -295,12 +295,12 @@ Link da documentação (Swagger): https://localiza-labs.eastus.cloudapp.azure.co
 - XUnit (Tests)
 - Moq (Tests)
 
-## Diferenciais
+## Pontos interessantes do projeto
 
 - [Uso de queries com interpolação sem problemas de SQL Inject](https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/1644ad7367cd1494a0ab4295de65bf2b0dd2bbae/Domain/Services/AgencyService.cs#L63). [<ins>__Implementação__</ins>](https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/1644ad7367cd1494a0ab4295de65bf2b0dd2bbae/Infrastructure/Database/Repositories/BaseRepository.cs#L58)
 - [Funcionalidade que descobre a agência mais próxima do usuário dada sua latitude e longitude](https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/1644ad7367cd1494a0ab4295de65bf2b0dd2bbae/Domain/Services/AgencyService.cs#L63)
 - Criação da entidade de cotação para guardar o preço que o usuário verá na tela
-- Implementação de todas as funcionalidades que o frontend e o mobile precisariam em seus projetos
+- Implementação de todas as funcionalidades que o pessoal do frontend e do mobile precisariam para fazer seus projetos
 
 ## Como rodar o projeto
 
