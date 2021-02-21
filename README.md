@@ -271,7 +271,9 @@ As categorias (luxo, básico, etc) de veículos são manipuladas no banco atrav�
 
 ## Funcionalidades da API
 
-Link da documentação (Swagger): https://localiza-labs.eastus.cloudapp.azure.com/swagger/index.html
+Link da documentação (Swagger): https://github.com/matheussinnis/ProjetoLocalizaLabsAPI/blob/master/swagger.json
+
+Basta abrir o arquivo swagger.json no site https://editor.swagger.io/
 
 ## Segurança da API
 
