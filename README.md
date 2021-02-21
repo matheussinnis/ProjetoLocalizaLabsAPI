@@ -318,6 +318,9 @@ dotnet watch --project Web/Web.csproj run -- --urls "http://0.0.0.0:5000"
 
 ```sh
 docker-compose up
+
+# Then, wait until you have this output in your terminal (it can take some minutes):
+# desafio_localiza_api_app |       Now listening on: http://0.0.0.0:5000
 ```
 
 ### Rodando no seu ambiente de desenvolvimento ou produção com Kubernetes, Ingress e HTTPS
